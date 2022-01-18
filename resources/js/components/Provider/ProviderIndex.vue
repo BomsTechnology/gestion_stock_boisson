@@ -1,7 +1,7 @@
 <template>
 <ConfirmModal :open="show" :toogleModal="toogleModal" :validateModal="validateModal"/>
     <div class="flex flex-col">
-        <div class="mb-4 flex justify-between w-full">
+        <div class="mb-4 flex justify-between items-center w-full">
           <div>
             <router-link :to="{name : 'providers.create'}" class="py-2 px-3 bg-green-500 text-white rounded-lg hover:bg-green-700 text-center"> Ajouter un fournisseur </router-link >
             </div>

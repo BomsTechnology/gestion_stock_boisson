@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\OutputResource;
+use App\Models\Customer;
+use App\Models\Drink;
 use App\Models\Output;
 use Illuminate\Http\Request;
 
@@ -16,7 +18,7 @@ class OutputController extends Controller
      */
     public function index()
     {
-        return OutputResource::collection(Output::all());
+        return OutputResource::collection(Output::latest()->get());
     }
 
     /**
@@ -27,7 +29,27 @@ class OutputController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $id = uniqid();
+        // $user_id = auth('api')->user()->id;
+        // $user_id = Auth::guard('api')->user()->id;
+        $output = new Output([
+            'id' => $id,
+            'amount' => $request->amount,
+            // 'user_id' => ''
+        ]);
+        $customer = Customer::find($request->customer_id);
+        $customer->outputs()->save($output);
+        // $output = Output::find($id);
+        // $user = User::find($user_id);        
+        // $user->outputs()->save();
+        foreach($request->drinks as $item){
+            $drink = Drink::find($item['id']);
+            $drink->outputs()->attach($id, ['quantity' => $item['quantity'], 'price' => $item['price']]);
+            // $output->drinks()->attach($drink['id'], ['quantity' => $drink['quantity'], 'price' => $drink['price']]);
+
+        }
+
+        return new OutputResource(Output::findOrFail($output->id));
     }
 
     /**
@@ -39,6 +61,20 @@ class OutputController extends Controller
     public function show(Output $output)
     {
         //
+    }
+
+
+    public function details(Request $request, string $id)
+    {
+        $output = Output::find($id);
+        $customer = Customer::find($output->customer_id);
+        // dd($output->drinks->first()->pivot);
+        return view('details',
+            [
+                'move' => $output,
+                'person' => $customer,
+            ]
+        );
     }
 
     /**

@@ -8,7 +8,9 @@ import ProviderCreate from "../components/Provider/ProviderCreate.vue";
 import ProviderEdit from "../components/Provider/ProviderEdit.vue";
 import InputIndex from "../components/Input/InputIndex.vue";
 import InputCreate from "../components/Input/InputCreate.vue";
+import InputDetails from "../components/Input/InputDetails.vue";
 import OutputIndex from "../components/Output/OutputIndex.vue";
+import OutputCreate from "../components/Output/OutputCreate.vue";
 import DrinkIndex from "../components/Drink/DrinkIndex.vue";
 import DrinkCreate from "../components/Drink/DrinkCreate.vue";
 import DrinkEdit from "../components/Drink/DrinkEdit.vue";
@@ -80,10 +82,27 @@ const routes = [
         component: InputCreate
     },
     {
+        path: '/inputs/:id/details',
+        name: 'inputs.details',
+        props: true,
+        component: InputDetails
+    },
+    {
         path: '/outputs',
         name: 'outputs',
         component: OutputIndex
     },
+    {
+        path: '/outputs/create',
+        name: 'outputs.create',
+        component: OutputCreate
+    },
+    // {
+    //     path: '/outputs/:id/details',
+    //     name: 'outputs.details',
+    //     props: true,
+    //     component: InputDetails
+    // },
     {
         path: '/bilan',
         name: 'bilan',

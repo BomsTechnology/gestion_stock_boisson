@@ -69,6 +69,16 @@ return [
         //     'driver' => 'database',
         //     'table' => 'users',
         // ],
+        'api' => [
+            'driver' => 'jwt',
+            'provider' => 'users',
+            'hash' => false,
+        ],
+
+        'inputs' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\Input::class,
+        ],
     ],
 
     /*

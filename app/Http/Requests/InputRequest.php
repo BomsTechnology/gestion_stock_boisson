@@ -13,7 +13,7 @@ class InputRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -24,7 +24,9 @@ class InputRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+            'amount' => 'required|gt:0',
+            'provider_id' => 'required',
+            // 'data' => 'required'
         ];
     }
 }

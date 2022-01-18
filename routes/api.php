@@ -18,16 +18,24 @@ use Illuminate\Support\Facades\Route;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
+// Route::middleware(['auth'])->group(function () {
+    Route::apiResource('inputs', InputController::class);
 
-Route::apiResource('customers', CustomerController::class);
+    Route::apiResource('outputs', OutputController::class);
 
-Route::apiResource('providers', ProviderController::class);
+    Route::apiResource('customers', CustomerController::class);
 
-Route::apiResource('drinks', DrinkController::class);
+    Route::apiResource('providers', ProviderController::class);
 
-Route::apiResource('inputs', InputController::class);
+    Route::apiResource('drinks', DrinkController::class);
+// });
 
-Route::apiResource('outputs', OutputController::class);
+
+// Route::post('inputs', [InputController::class, 'store']);
+
+//Route::get('/inputs/{moves}', 'App\Http\Controllers\Api\InputController@store');
+
+
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();

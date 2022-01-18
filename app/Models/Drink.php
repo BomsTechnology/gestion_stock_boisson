@@ -27,7 +27,7 @@ class Drink extends Model
         return $this->morphedByMany(Input::class, 'move');
     }
 
-    public function outputts()
+    public function outputs()
     {
         return $this->morphedByMany(Output::class, 'move');
     }

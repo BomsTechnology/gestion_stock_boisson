@@ -34,6 +34,6 @@ class Output extends Model
 
     public function drinks()
     {
-        return $this->morphToMany(Drink::class, 'move');
+        return $this->morphToMany(Drink::class, 'move')->withPivot('quantity', 'price')->withTimestamps();;
     }
 }

@@ -26,13 +26,13 @@
                   <span class="inline-flex items-center px-3 rounded-l-md border border-r-0 border-gray-300 bg-gray-50 text-gray-500 text-sm">
                     Nom
                   </span>
-                  <input v-model="provider.name" type="text" name="price" id="price" class="focus:ring-indigo-500 focus:border-indigo-500 flex-1 block w-full rounded-none rounded-r-md sm:text-sm border-gray-300">
+                  <input v-model="person.name" type="text" name="price" id="price" class="focus:ring-indigo-500 focus:border-indigo-500 flex-1 block w-full rounded-none rounded-r-md sm:text-sm border-gray-300">
                 </div>
                 <div class="mt-2 flex rounded-md shadow-sm">
                   <span class="inline-flex items-center px-3 rounded-l-md border border-r-0 border-gray-300 bg-gray-50 text-gray-500 text-sm">
                     Contact
                   </span>
-                  <input v-model="provider.contact" type="number" name="price" id="price" class="focus:ring-indigo-500 focus:border-indigo-500 flex-1 block w-full rounded-none rounded-r-md sm:text-sm border-gray-300">
+                  <input v-model="person.contact" type="number" name="price" id="price" class="focus:ring-indigo-500 focus:border-indigo-500 flex-1 block w-full rounded-none rounded-r-md sm:text-sm border-gray-300">
                 </div>
 
           </div>
@@ -54,7 +54,7 @@
 
 <script>
 export default {
-  props: [ 'open', 'toogleModal', 'addType', 'provider', 'add'],
+  props: [ 'open', 'toogleModal', 'addType', 'person', 'add'],
    data() {
        return {
            

@@ -1,7 +1,7 @@
 <template>
 <ConfirmModal :open="show" :toogleModal="toogleModal" :validateModal="validateModal"/>
 <div class="flex flex-col">
-    <div class="mb-4 flex justify-between w-full">
+    <div class="mb-4 flex justify-between items-center w-full">
       <div>
         <router-link :to="{name:'customers.create'}" class="px-3 py-2 bg-green-500 text-white rounded-md hover:bg-green-700 text-center"> Ajouter un client </router-link >
         </div>

@@ -1,5 +1,5 @@
 <template>
-<AddPerson :open="show_a_p" :toogleModal="toogleModal" :addType="'Fournisseur'" :person="currentProvider" :add="addProvider" />
+<AddPerson :open="show_a_p" :toogleModal="toogleModal" :addType="'Client'" :person="currentCustomer" :add="addCustomer" />
   <div class="font-light text-red-500 text-sm p-2 bg-red-100" v-if="m_error != ''">
     <span>{{ m_error }}</span>
   </div>
@@ -33,6 +33,9 @@
                 Nom
               </th>
               <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                Quantité en stock
+              </th>
+              <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                 Prix du cassier
               </th>
               <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider" v-if="currentDrink.id != ''">
@@ -51,11 +54,14 @@
                 <img class="h-8 w-8 rounded-full" src="../../../../public/img/default-img.png" alt="">
                 </div>
                 <div class="ml-4">
-                <div class="text-sm text-gray-900 uppercase font-semibold">
+                <div class="text-sm  text-gray-900 uppercase font-semibold">
                     {{ drink.name }}
                 </div>
                 </div>
             </div>
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap">
+                <div class="text-sm text-gray-900">{{ drink.quantity }} Cassier<span v-if="drink.quantity > 1">s</span></div>
               </td>
               <td class="px-6 py-4 whitespace-nowrap">
                 <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
@@ -64,12 +70,12 @@
               </td>
               <td class="px-6 py-4 whitespace-nowrap" v-if="currentDrink.id != ''">
                 <div class="mt-2 flex rounded-md shadow-sm" v-if="currentDrink.id === drink.id">
-                  <input v-model="drink.quantity" type="number" name="price" id="price" class="focus:ring-indigo-500 focus:border-indigo-500 flex-1 block w-full rounded sm:text-sm border-gray-300">
+                  <input v-model="nb" type="number" name="price" id="price" class="focus:ring-indigo-500 focus:border-indigo-500 flex-1 block w-full rounded sm:text-sm border-gray-300">
                 </div>
               </td>
               <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
                 <button @click="insertQuantity(drink)" v-if="currentDrink.id == drink.id" class="px-2 py-1 ml-2 bg-blue-500 text-white rounded-md hover:bg-blue-700">  Valider </button>
-                <button @click="showInput(drink)" v-else class="px-2 py-1 ml-2 bg-blue-500 text-white rounded-md hover:bg-blue-700">Ajouter</button>
+                <button @click="showOutput(drink)" v-else class="px-2 py-1 ml-2 bg-blue-500 text-white rounded-md hover:bg-blue-700">Ajouter</button>
               </td>
             </tr>
 
@@ -83,27 +89,27 @@
     <div class="shadow-lg shadow-blue-200/50 w-full mx-2 p-4 rounded-lg">
       <div>
         <h1 class="text-xl font-semibold">
-        Informations sur l'Entrée
+        Informations sur la sortie
       </h1>
       </div>
-      <form @submit.prevent="saveInput">
+      <form @submit.prevent="saveOutput">
       <div class="mt-2 relative">
         <label for="first-name" class="block text-sm font-light text-gray-700">Nom du fournisseur</label>
-        <input type="text" v-model="searchProvider"   name="provider_id" id="provider_id"  class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
-        <div class="bg-gray-50 border border-gray-100 shadow-md rounded-md w-full absolute" v-if="searchProvider != '' && searchProvider != currentProvider.name" >
-          <ul v-for="provider in filteredProvider" :key="provider.id">
-              <li @click="selectProvider(provider)" class="p-2 border-b border-gray-300 text-sm cursor-pointer text-gray-500 hover:bg-gray-200 hover:text-gray-600">
-                  {{ provider.name }}
+        <input type="text" v-model="searchCustomer"   name="customer_id" id="customer_id"  class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
+        <div class="bg-gray-50 border border-gray-100 shadow-md rounded-md w-full absolute" v-if="searchCustomer != '' && searchCustomer != currentCustomer.name" >
+          <ul v-for="customer in filteredCustomer" :key="customer.id">
+              <li @click="selectCustomer(customer)" class="p-2 border-b border-gray-300 text-sm cursor-pointer text-gray-500 hover:bg-gray-200 hover:text-gray-600">
+                  {{ customer.name }}
               </li>
           </ul>
       </div>
       <!-- <div  class="hidden">
           
       </div> -->
-      <div class="bg-gray-50 border border-gray-100 shadow-md rounded-md w-full absolute" v-if="searchProvider  != '' && filteredProvider.length == [] ">
+      <div class="bg-gray-50 border border-gray-100 shadow-md rounded-md w-full absolute" v-if="searchCustomer  != '' && filteredCustomer.length == [] ">
           <ul>
               <li class="p-2 border-b border-gray-300 text-sm cursor-pointer text-gray-500 hover:bg-gray-200 hover:text-gray-600" @click="toogleModal">
-                  Ajouter le fournisseur "{{ searchProvider }}"
+                  Ajouter le fournisseur "{{ searchCustomer }}"
               </li>
           </ul>
       </div>
@@ -147,8 +153,8 @@
                         </span>
                       </td>
                       <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                        <button @click="validateModifyInput(drink)" class="text-indigo-600 hover:text-indigo-900" v-if="show_m_field">Valider</button>
-                        <button @click="showModifyInput(drink)" class="text-indigo-600 hover:text-indigo-900" v-else>Modifier</button>
+                        <button @click="validateModifyOutput(drink)" class="text-indigo-600 hover:text-indigo-900" v-if="show_m_field">Valider</button>
+                        <button @click="showModifyOutput(drink)" class="text-indigo-600 hover:text-indigo-900" v-else>Modifier</button>
                         <button @click="removeDrink(drink)" class="text-red-600 ml-1 hover:text-red-900">Retier</button>
                       </td>
                     </tr>
@@ -180,55 +186,55 @@
 <script>
 import { reactive } from 'vue';
 import useDrinks from "../../services/drinkservices.js";
-import useInputs from "../../services/inputservices.js";
-import useProviders from "../../services/providerservices.js";
+import useOutputs from "../../services/outputservices.js";
+import useCustomers from "../../services/customerservices.js";
 import AddPerson from "../Modal/AddPerson.vue";
 
 export default {
   components: { AddPerson },
-  setup(props){
+  setup(){
     const {drinks, getDrinks } = useDrinks();
-    const {drinkList, errors, createInputs } = useInputs();
-    const {providers, getProviders, createProvider, } = useProviders();
-    const currentProvider = reactive({
+    const {drinkList, errors, createOutputs } = useOutputs();
+    const {customers, getCustomers, createCustomer, } = useCustomers();
+    const currentCustomer = reactive({
         id: '',
         name: '',
         contact: '',
       });
-      const currentInput = reactive({
+      const currentOutput = reactive({
         amount: '',
-        provider_id: '',
+        customer_id: '',
         drinks: drinkList
       });
-      const storeProvider = async () => {
-          currentProvider.drinks = drinkList;
-          await createProvider({...currentProvider});
-          await getProviders();
+      const storeCustomer = async () => {
+          currentCustomer.drinks = drinkList;
+          await createCustomer({...currentCustomer});
+          await getCustomers();
       }
 
-      const saveInput = async () => {
-        currentProvider.drinks = drinkList;
-        console.log(currentProvider.drinks);
-        await createInputs({...currentInput});
+      const saveOutput = async () => {
+        currentCustomer.drinks = drinkList;
+        console.log(currentCustomer.drinks);
+        await createOutputs({...currentOutput});
       };
         
     return{
       drinks,
-      providers,
-      getProviders,
-      currentProvider,
+      customers,
+      getCustomers,
+      currentCustomer,
       getDrinks,
       drinkList,
-      storeProvider,
+      storeCustomer,
       errors,
-      saveInput,
-      currentInput
+      saveOutput,
+      currentOutput
     }
   },
   data () {
     return {
       searchDrink: '',
-      searchProvider: '',
+      searchCustomer: '',
       m_error: '',
       show_m_field: false,
       show_a_p: false,
@@ -239,6 +245,7 @@ export default {
         price: '',
         quantity: ''
       },
+      nb: ''
     }
   },
   computed: {
@@ -247,9 +254,9 @@ export default {
             return drink.name.toLowerCase().includes(this.searchDrink.toLowerCase());
         })
     },
-    filteredProvider() {
-        return this.providers.filter((provider) => {
-            return provider.name.toLowerCase().includes(this.searchProvider.toLowerCase());
+    filteredCustomer() {
+        return this.customers.filter((customer) => {
+            return customer.name.toLowerCase().includes(this.searchCustomer.toLowerCase());
         })
     },
     sum() {
@@ -257,13 +264,13 @@ export default {
       this.drinkList.forEach((item, index, arr) => {
           this.amount += parseFloat(item.price) * parseFloat(item.quantity);
       });
-      this.currentInput.amount = this.amount;
-      console.log(this.currentInput.amount);
+      this.currentOutput.amount = this.amount;
+      console.log(this.currentOutput.amount);
       return this.amount;
     },
   },
   methods: {
-    showInput(drink) {
+    showOutput(drink) {
       this.m_error = false;
       if(this.isHere(drink.id)){
         this.m_error = "Cette boisson existe déja dans l'éntrée en cours, vous pouvez la modifier !!!";
@@ -273,35 +280,38 @@ export default {
           this.m_error = "Une modification est en cours, veillez la terminée";
         }else{
         this.currentDrink = drink;
-        this.currentDrink.quantity = '';
+        // this.currentDrink.quantity = '';
         }
       }
     },
-    showModifyInput(drink) {
+    showModifyOutput(drink) {
         this.show_m_field = true;
     },
-    validateModifyInput(drink) {
+    validateModifyOutput(drink) {
         if(drink.quantity == '' || drink.quantity <= 0){
         this.m_error = 'Entrez une quantité valide';
       }else{
         this.show_m_field = false;
       }
     },
-    insertQuantity() {
+    insertQuantity(drink) {
       if(this.currentDrink.quantity == '' || this.currentDrink.quantity <= 0){
         this.m_error = 'Entrez une quantité valide';
       }else{
-        // console.log(this.currentDrink);
+
         if(this.isHere(this.currentDrink.id)){
           this.m_error = "Cette boisson existe déja dans l'éntrée en cours, vous pouvez la modifier !!!";
-        }else{
-          if(this.show_m_field)
-        {
+        }else if(this.show_m_field){
           this.m_error = "Une modification est en cours, veillez la terminée";
+        }else if(this.nb > drink.quantity){
+            this.m_error = "Quantité insuffisante";
         }else{
+          this.currentDrink.quantity = this.nb;
+          // console.log(this.currentDrink);
           this.drinkList.push(this.currentDrink);
+          console.log(this.drinkList);
         }
-        }
+        
       }
       
     },
@@ -309,29 +319,29 @@ export default {
         let index = this.drinkList.indexOf(drink);
         this.drinkList.splice(index, 1);
     },
-    selectProvider(provider) {
-        this.currentProvider = provider;
-        this.searchProvider = this.currentProvider.name; 
-        this.currentInput.provider_id = this.currentProvider.id;
-        // console.log(this.currentProvider);
+    selectCustomer(customer) {
+        this.currentCustomer = customer;
+        this.searchCustomer = this.currentCustomer.name; 
+        this.currentOutput.customer_id = this.currentCustomer.id;
+        // console.log(this.currentCustomer);
     },
-    // checkProvider() {
-    //     if(this.currentProvider.id != '' && this.currentProvider.name != this.searchProvider){
-    //         this.currentProvider.id = '';
-    //         this.currentProvider.name = '';
-    //         this.currentProvider.contact = '';
-    //         console.log(this.currentProvider);
+    // checkCustomer() {
+    //     if(this.currentCustomer.id != '' && this.currentCustomer.name != this.searchCustomer){
+    //         this.currentCustomer.id = '';
+    //         this.currentCustomer.name = '';
+    //         this.currentCustomer.contact = '';
+    //         console.log(this.currentCustomer);
     //     }else{
-    //     console.log(this.currentProvider);
+    //     console.log(this.currentCustomer);
     //     }
     // },
     toogleModal() {
       this.show_a_p = !this.show_a_p;
-      this.currentProvider.id = '';
-      this.currentProvider.name = this.searchProvider;
+      this.currentCustomer.id = '';
+      this.currentCustomer.name = this.searchCustomer;
     },
-    addProvider() {
-        this.storeProvider();
+    addCustomer() {
+        this.storeCustomer();
         this.show_a_p = !this.show_a_p;
     },
     isHere(id) {
@@ -345,7 +355,7 @@ export default {
   },
   mounted () {
     this.getDrinks();
-    this.getProviders();
+    this.getCustomers();
   }
 }
 </script>

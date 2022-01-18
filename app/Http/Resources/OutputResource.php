@@ -14,6 +14,16 @@ class OutputResource extends JsonResource
      */
     public function toArray($request)
     {
-        return parent::toArray($request);
+        // return parent::toArray($request);
+        return [
+            'id' => $this->id,
+            'customer' => $this->customer_id,
+            'amount' => $this->amount,
+            'date' => $this->created_at,
+            // 'drinks' => $this->whenPivotLoaded('moves', function () {
+            //     return $this->pivot->drinks;
+            // }),
+            // 'drinks' => $this->id;
+        ];
     }
 }
