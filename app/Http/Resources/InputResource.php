@@ -17,9 +17,10 @@ class InputResource extends JsonResource
         // return parent::toArray($request);
         return [
             'id' => $this->id,
-            'provider' => $this->provider_id,
+            'person' => $this->provider_id,
             'amount' => $this->amount,
             'date' => $this->created_at,
+            'type' => 'Entrées'
             // 'drinks' => $this->whenPivotLoaded('moves', function () {
             //     return $this->pivot->drinks;
             // }),

@@ -307,8 +307,8 @@ export default {
             this.m_error = "Quantité insuffisante";
         }else{
           this.currentDrink.quantity = this.nb;
-          // console.log(this.currentDrink);
           this.drinkList.push(this.currentDrink);
+          this.nb = '';
           console.log(this.drinkList);
         }
         

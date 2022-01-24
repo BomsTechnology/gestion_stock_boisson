@@ -26,7 +26,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/providers', function () { return view('provider'); })->name('providers');
     Route::get('/inputs', function () { return view('input'); })->name('inputs');
     Route::get('/inputs/{id}/details', [InputController::class, 'details'])->name('inputs.details');
-    Route::get('/outputs/{id}/details', [OutputController::class, 'details'])->name('inputs.details');
+    Route::get('/outputs/{id}/details', [OutputController::class, 'details'])->name('outputs.details');
     Route::get('/outputs', function () { return view('output'); })->name('outputs');
     Route::get('/bilan', function () { return view('bilan'); })->name('bilan');
     Route::get('/drinks', function () { return view('drink'); })->name('drinks');

@@ -1,4 +1,7 @@
 import { createRouter, createWebHistory } from "vue-router";
+import TransactionDrinks from "../components/Transaction/TransactionDrinks.vue";
+import TransactionProvider from "../components/Transaction/TransactionProvider.vue";
+import TransactionCustomer from "../components/Transaction/TransactionCustomer.vue";
 import DashboardIndex from "../components/DashboardIndex.vue";
 import CustomerIndex from "../components/Customer/CustomerIndex.vue";
 import CustomerCreate from "../components/Customer/CustomerCreate.vue";
@@ -97,12 +100,24 @@ const routes = [
         name: 'outputs.create',
         component: OutputCreate
     },
-    // {
-    //     path: '/outputs/:id/details',
-    //     name: 'outputs.details',
-    //     props: true,
-    //     component: InputDetails
-    // },
+    {
+        path: '/transaction/:id/drinks',
+        name: 'transaction.drinks',
+        props: true,
+        component: TransactionDrinks
+    },
+    {
+        path: '/transaction/:id/customer',
+        name: 'transaction.customer',
+        props: true,
+        component: TransactionCustomer
+    },
+    {
+        path: '/transaction/:id/provider',
+        name: 'transaction.provider',
+        props: true,
+        component: TransactionProvider
+    },
     {
         path: '/bilan',
         name: 'bilan',

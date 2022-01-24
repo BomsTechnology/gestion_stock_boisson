@@ -26,8 +26,8 @@
                 {{-- <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg"> --}}
                     {{-- <div class="p-6 bg-white border-b border-gray-200"> --}}
                         <div class="py-4 relative">
-                            <div class="text-sm absolute left-25">
-                              <a href="/inputs"
+                            {{-- <div class="text-sm absolute left-25">
+                              <a @if (request()->routeIs('outputs.details')) href="/outputs" @else href="/inputs" @endif
                                     class="bg-blue-500  flex text-white tracking-widest p-1 px-2 rounded shadow-md  items-center">
                                     <span>
                                         <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20"
@@ -41,7 +41,7 @@
                                         Home
                                     </span>
                                 </a >
-                            </div>
+                            </div> --}}
                             <div class="max-w-6xl mx-auto sm:px-6 lg:px-8">
                                 <div class="rounded-none rounded-r-md p-2 bg-white">
                                     <div class="text-2xl font-semibold tracking-widest"> <h2>N° facture : {{ $move->id }}</h2> </div>
@@ -51,7 +51,15 @@
                                                 <div class="px-4 py-5 bg-white sm:p-6">
                                                     <div class="col-span-6 sm:col-span-3 mb-3 text-xl font-bold">
                                                         <span for="country" class="text-gray-900 px-2">Date : {{ $move->created_at }}</span>
-                                                        <span for="country" class="text-gray-500 px-2">Nom Fournisseur : {{ $person->name }}</span>
+                                                        <span for="country" class="text-gray-500 px-2">
+                                                            Nom 
+                                                        @if (request()->routeIs('outputs.details'))
+                                                            Client
+                                                        @else
+                                                            Fournisseur    
+                                                        @endif
+                                                        :{{ $person->name }}
+                                                        </span>
                                                         <span class="px-2 text-gray-500">Contact : {{ $person->contact }}</span>
                                                       </div>
                     

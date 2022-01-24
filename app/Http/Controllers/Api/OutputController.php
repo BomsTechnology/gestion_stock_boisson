@@ -30,8 +30,6 @@ class OutputController extends Controller
     public function store(Request $request)
     {
         $id = uniqid();
-        // $user_id = auth('api')->user()->id;
-        // $user_id = Auth::guard('api')->user()->id;
         $output = new Output([
             'id' => $id,
             'amount' => $request->amount,
@@ -39,14 +37,12 @@ class OutputController extends Controller
         ]);
         $customer = Customer::find($request->customer_id);
         $customer->outputs()->save($output);
-        // $output = Output::find($id);
-        // $user = User::find($user_id);        
-        // $user->outputs()->save();
+
         foreach($request->drinks as $item){
             $drink = Drink::find($item['id']);
             $drink->outputs()->attach($id, ['quantity' => $item['quantity'], 'price' => $item['price']]);
-            // $output->drinks()->attach($drink['id'], ['quantity' => $drink['quantity'], 'price' => $drink['price']]);
-
+            $drink->quantity = intval($drink->quantity) - intval($item['quantity']);
+            $drink->save();
         }
 
         return new OutputResource(Output::findOrFail($output->id));
@@ -63,12 +59,14 @@ class OutputController extends Controller
         //
     }
 
-
+    public function getLimit()
+    {
+        return OutputResource::collection(Output::latest()->limit(5)->get());
+    }
     public function details(Request $request, string $id)
     {
         $output = Output::find($id);
         $customer = Customer::find($output->customer_id);
-        // dd($output->drinks->first()->pivot);
         return view('details',
             [
                 'move' => $output,

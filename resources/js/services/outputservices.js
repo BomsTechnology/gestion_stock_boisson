@@ -20,9 +20,12 @@ export default function useOutputs() {
         outputs.value = response.data.data;
 
         for (var i = 0; i < outputs.value.length; i++) {
+            
+            outputs.value[i].date = new Date(outputs.value[i].date);
+
             for (var y = 0; y < customers.value.length; y++) {
-                if(outputs.value[i].customer === customers.value[y].id){
-                    outputs.value[i].customer = customers.value[y].name;
+                if(outputs.value[i].person === customers.value[y].id){
+                    outputs.value[i].person = customers.value[y].name;
                 }
             }
           }

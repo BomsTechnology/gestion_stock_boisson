@@ -1,6 +1,6 @@
 import axios from "axios";
 import { ref } from "vue";
-// import router from "../router/index.js"
+import router from "../router/index.js";
 
 export default function useCustomers() {
 

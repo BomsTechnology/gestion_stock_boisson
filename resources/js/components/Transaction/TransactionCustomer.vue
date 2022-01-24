@@ -97,9 +97,15 @@
 </template>
 
 <script>
-import useDashboard from "../services/transactionservices.js";
+import useDashboard from "../../services/transactionservices.js";
 
 export default {
+  props: {
+          id : {
+              required: true,
+              type: String
+          }
+      },
   data() {
     return{
       searchKey: ''
