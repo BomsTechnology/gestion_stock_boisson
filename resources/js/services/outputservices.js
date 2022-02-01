@@ -1,17 +1,16 @@
 import axios from "axios";
 import { ref } from "vue";
 import router from "../router/index.js"
-// import useCustomers from "./customerservices.js";
-// import useOutputs from "./drinkservices.js";
+
 
 export default function useOutputs() {
     const outputs = ref([]);
-    // const output = ref([]);
+    const loading = ref('');
     const drinkList = ref([]);
     const errors = ref('');
     const customers = ref([]);
 
-    // const {drinks, getOutputs } = useOutputs();
+
 
     const getOutputs = async () => {
         let response = await axios.get('/api/customers');
@@ -29,22 +28,15 @@ export default function useOutputs() {
                 }
             }
           }
+          loading.value = true;
     };
-
-    // const getOutput = async (id) => {
-    //     let response = await axios.get('/api/outputs/' + id);
-    //     output.value = response.data.data;
-    // };
 
     const createOutputs = async (data) => {
         try {
             await axios.post('/api/outputs', data);
             await getOutputs();
             let id = outputs._rawValue[0].id;
-            // router.push({ name: 'outputs.details', params: { id : id } });
-            // let initialPage = location.pathname;
-            location.replace('/outputs/' + id + '/details');
-            // window.location('/outputs' + id + '/details');            
+            location.replace('/outputs/' + id + '/details');          
         } catch (e) {
             if (e.response.status == 422) {
                 for (const key in e.response.data.errors)
@@ -59,6 +51,7 @@ export default function useOutputs() {
         errors,
         createOutputs,
         getOutputs,
-        outputs
+        outputs,
+        loading
     }
 }

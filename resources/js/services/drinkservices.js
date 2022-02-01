@@ -7,10 +7,12 @@ export default function useDrinks() {
     const drinks = ref([]);
     const drink = ref([]);
     const errors = ref('');
+    const loading = ref('');
 
     const getDrinks = async () => {
         let response = await axios.get('/api/drinks');
         drinks.value = response.data.data;
+        loading.value = true;
     };
 
     const getDrink = async (id) => {
@@ -45,13 +47,20 @@ export default function useDrinks() {
     };
 
     const destroyDrink = async (id) => {
+        try {
         await axios.delete('/api/drinks/' + id);
+    } catch (e) {
+        if (e.response.status == '500') {
+            errors.value = 'Impossible de supprimer cette boisson elle intervient dans une ou plusieurs transactions';
+        }
+    }
     };
 
     return {
         drinks,
         drink,
         errors,
+        loading,
         getDrinks,
         getDrink,
         createDrink,

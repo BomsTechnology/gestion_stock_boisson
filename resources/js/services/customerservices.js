@@ -6,11 +6,13 @@ export default function useCustomers() {
 
     const customers = ref([]);
     const customer = ref([]);
+    const loading = ref('');
     const errors = ref('');
 
     const getCustomers = async () => {
         let response = await axios.get('/api/customers');
         customers.value = response.data.data;
+        loading.value = true;
     };
 
     const getCustomer = async (id) => {
@@ -44,7 +46,13 @@ export default function useCustomers() {
     };
 
     const destroyCustomer = async (id) => {
+        try {
         await axios.delete('/api/customers/' + id);
+    } catch (e) {
+        if (e.response.status == '500') {
+            errors.value = 'Impossible de supprimer ce client il intervient dans une ou plusieurs transactions';
+        }
+    }
     };
 
     return {

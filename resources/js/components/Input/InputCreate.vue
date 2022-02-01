@@ -1,10 +1,11 @@
 <template>
-<AddPerson :open="show_a_p" :toogleModal="toogleModal" :addType="'Fournisseur'" :person="currentProvider" :add="addProvider" />
+<Loading :open="show_loading" />
+<AddPerson :open="show_a_p" :toogleModal="toogleModal" :addType="'Fournisseur'" :person="currentProvider" :add="addProvider" :error="m_error"/>
   <div class="font-light text-red-500 text-sm p-2 bg-red-100" v-if="m_error != ''">
-    <span>{{ m_error }}</span>
+    <span v-text="m_error"></span>
   </div>
   <div class="font-light text-red-500 text-sm p-2 bg-red-100" v-if="errors != ''">
-    <span>{{ errors }}</span>
+    <span v-text="errors"></span>
   </div>
   <div class="flex justify-between w-full mx-auto px-4 py-6 overflow-x-scroll">
     <div class="shadow-lg shadow-blue-200/50 w-full mx-2 p-4 rounded-lg">
@@ -86,7 +87,7 @@
         Informations sur l'Entrée
       </h1>
       </div>
-      <form @submit.prevent="saveInput">
+      <form @submit.prevent="addInput">
       <div class="mt-2 relative">
         <label for="first-name" class="block text-sm font-light text-gray-700">Nom du fournisseur</label>
         <input type="text" v-model="searchProvider"   name="provider_id" id="provider_id"  class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
@@ -119,8 +120,8 @@
             <div class="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
               <div class="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg h-80 overflow-y-scroll">
                 <table class="min-w-full divide-y divide-gray-200">
-                  <tbody class="bg-white divide-y divide-gray-200" v-for="drink in drinkList" :key="drink.id">
-                    <tr>
+                  <tbody class="bg-white divide-y divide-gray-200" v-if="drinkList.length != 0" >
+                    <tr v-for="drink in drinkList" :key="drink.id">
                       <td class="px-6 py-4 whitespace-nowrap">
                         <div class="flex items-center">
                           <div class="ml-4">
@@ -153,6 +154,11 @@
                       </td>
                     </tr>
                   </tbody>
+                  <tr v-else>
+                    <td class="px-6 py-4 whitespace-nowrap text-center" colspan="3">
+                      AUCUNE BOISSON
+                    </td>
+                  </tr>
                 </table>
               </div>
             </div>
@@ -183,9 +189,10 @@ import useDrinks from "../../services/drinkservices.js";
 import useInputs from "../../services/inputservices.js";
 import useProviders from "../../services/providerservices.js";
 import AddPerson from "../Modal/AddPerson.vue";
+import Loading from "../Modal/Loading.vue";
 
 export default {
-  components: { AddPerson },
+  components: { AddPerson, Loading },
   setup(props){
     const {drinks, getDrinks } = useDrinks();
     const {drinkList, errors, createInputs } = useInputs();
@@ -239,6 +246,7 @@ export default {
         price: '',
         quantity: ''
       },
+      show_loading: false,
     }
   },
   computed: {
@@ -263,6 +271,13 @@ export default {
     },
   },
   methods: {
+    addInput(){
+      this.errors = '';
+      if(this.drinkList.length != [] && this.currentProvider.id != ''){
+        this.show_loading = true;    
+      }
+      this.saveInput();
+    },
     showInput(drink) {
       this.m_error = false;
       if(this.isHere(drink.id)){
@@ -291,7 +306,6 @@ export default {
       if(this.currentDrink.quantity == '' || this.currentDrink.quantity <= 0){
         this.m_error = 'Entrez une quantité valide';
       }else{
-        // console.log(this.currentDrink);
         if(this.isHere(this.currentDrink.id)){
           this.m_error = "Cette boisson existe déja dans l'éntrée en cours, vous pouvez la modifier !!!";
         }else{
@@ -313,18 +327,7 @@ export default {
         this.currentProvider = provider;
         this.searchProvider = this.currentProvider.name; 
         this.currentInput.provider_id = this.currentProvider.id;
-        // console.log(this.currentProvider);
     },
-    // checkProvider() {
-    //     if(this.currentProvider.id != '' && this.currentProvider.name != this.searchProvider){
-    //         this.currentProvider.id = '';
-    //         this.currentProvider.name = '';
-    //         this.currentProvider.contact = '';
-    //         console.log(this.currentProvider);
-    //     }else{
-    //     console.log(this.currentProvider);
-    //     }
-    // },
     toogleModal() {
       this.show_a_p = !this.show_a_p;
       this.currentProvider.id = '';

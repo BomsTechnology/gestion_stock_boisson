@@ -6,6 +6,7 @@ export default function useDashboard() {
     const moves = ref([]);
     const providers = ref([]);
     const customers = ref([]);
+    const loading = ref('');
 
     const getRecents = async () => {
         let response = await axios.get('/api/customers');
@@ -47,19 +48,50 @@ export default function useDashboard() {
 
             }
         }
-        console.log(moves.value);
+        loading.value = true;
     };
 
     const getTransactionCustomer = async (id) => {
+        let response = await axios.get('/api/transaction-outputs/' +  id);
+        moves.value = response.data.data;
+        console.log(moves.value);
+        response = await axios.get('/api/customers');
+        customers.value = response.data.data;
+        for (var i = 0; i < moves.value.length; i++) {
+            moves.value[i].date = new Date(moves.value[i].date);
+
+                for (var y = 0; y < customers.value.length; y++) {
+                    if (moves.value[i].person === customers.value[y].id) {
+                        moves.value[i].person = customers.value[y].name;
+                    }
+                }
+        }
+        loading.value = true;
     };
 
     const getTransactionProvider = async (id) => {
+        let response = await axios.get('/api/transaction-inputs/' +  id);
+        moves.value = response.data.data;
+        console.log(moves.value);
+        response = await axios.get('/api/providers');
+        providers.value = response.data.data;
+        for (var i = 0; i < moves.value.length; i++) {
+            moves.value[i].date = new Date(moves.value[i].date);
+
+                for (var y = 0; y < providers.value.length; y++) {
+                    if (moves.value[i].person === providers.value[y].id) {
+                        moves.value[i].person = providers.value[y].name;
+                    }
+                }
+        }
+        loading.value = true;
     }
 
     return {
         getRecents,
         getTransactionCustomer,
         getTransactionProvider,
-        moves
+        moves,
+        loading
     };
 }

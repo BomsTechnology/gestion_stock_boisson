@@ -7,10 +7,12 @@ export default function useProviders() {
     const providers = ref([]);
     const provider = ref([]);
     const errors = ref('');
+    const loading = ref('');
 
     const getProviders = async () => {
         let response = await axios.get('/api/providers');
         providers.value = response.data.data;
+        loading.value = true;
     };
 
     const getProvider = async (id) => {
@@ -44,13 +46,20 @@ export default function useProviders() {
     };
 
     const destroyProvider = async (id) => {
+        try {
         await axios.delete('/api/providers/' + id);
+    } catch (e) {
+        if (e.response.status == '500') {
+            errors.value = 'Impossible de supprimer ce fournisseur il intervient dans une ou plusieurs transactions';
+        }
+    }
     };
 
     return {
         providers,
         provider,
         errors,
+        loading,
         getProviders,
         getProvider,
         createProvider,

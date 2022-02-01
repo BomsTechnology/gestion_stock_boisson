@@ -32,8 +32,10 @@ Route::apiResource('drinks', DrinkController::class);
 Route::get('inputs-limit', [InputController::class, 'getLimit'])->name('input.limit');
 Route::get('outputs-limit', [OutputController::class, 'getLimit'])->name('outputs.limit');
 
-Route::get('transaction-inputs', [InputController::class, 'transaction'])->name('input.transaction');
-Route::get('transaction-outputs', [OutputController::class, 'transaction'])->name('outputs.transaction');
+Route::get('transaction-inputs/{id}', [InputController::class, 'transaction_provider'])->name('input.transaction');
+Route::get('transaction-outputs/{id}', [OutputController::class, 'transaction_customer'])->name('outputs.transaction');
+Route::get('transaction-inputs-drinks/{id}', [InputController::class, 'transaction_drinks'])->name('input.transaction');
+Route::get('transaction-outputs-drinks/{id}', [OutputController::class, 'transaction_drinks'])->name('outputs.transaction');
 
 
 

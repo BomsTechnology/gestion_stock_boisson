@@ -51,6 +51,8 @@ class InputController extends Controller
         foreach($request->drinks as $item){
             $drink = Drink::find($item['id']);
             $drink->inputs()->attach($id, ['quantity' => $item['quantity'], 'price' => $item['price']]);
+            $drink->quantity = intval($drink->quantity) + intval($item['quantity']);
+            $drink->save();
         }
 
         return new InputResource(Input::findOrFail($input->id));
@@ -95,7 +97,26 @@ class InputController extends Controller
     {
         //
     }
+    public function transaction_provider(Request $request, $id)
+    {
+        return InputResource::collection(Input::where('provider_id', '=', $id)->get());
+    }
 
+    public function transaction_drinks(Request $request, $id)
+    {
+        $inputs = DB::table('moves')
+        ->join('inputs', 'moves.move_id', '=', 'inputs.id')
+        ->join('drinks', function ($join, $id) {
+            $join->on('moves.drink_id', '=', 'drinks.id')
+                 ->where('drinks.id', '=', $id);
+        })
+        ->select('inputs.*')
+        ->get();
+
+        dd($inputs);
+
+        // return InputResource::collection($inputs);
+    }
     /**
      * Remove the specified resource from storage.
      *

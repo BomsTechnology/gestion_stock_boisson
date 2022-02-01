@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\OutputRequest;
 use App\Http\Resources\OutputResource;
 use App\Models\Customer;
 use App\Models\Drink;
@@ -27,7 +28,7 @@ class OutputController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(OutputRequest $request)
     {
         $id = uniqid();
         $output = new Output([
@@ -40,8 +41,8 @@ class OutputController extends Controller
 
         foreach($request->drinks as $item){
             $drink = Drink::find($item['id']);
-            $drink->outputs()->attach($id, ['quantity' => $item['quantity'], 'price' => $item['price']]);
-            $drink->quantity = intval($drink->quantity) - intval($item['quantity']);
+            $drink->outputs()->attach($id, ['quantity' => $item['buyQte'], 'price' => $item['price']]);
+            $drink->quantity = intval($drink->quantity) - intval($item['buyQte']);
             $drink->save();
         }
 
@@ -82,11 +83,14 @@ class OutputController extends Controller
      * @param  \App\Models\Output  $output
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Output $output)
+    public function transaction_customer(Request $request, $id)
+    {
+        return OutputResource::collection(Output::where('customer_id', '=', $id)->get());
+    }
+    public function update(Request $request, Output $input)
     {
         //
     }
-
     /**
      * Remove the specified resource from storage.
      *

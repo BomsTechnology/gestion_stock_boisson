@@ -8,7 +8,7 @@ export default function useInputs() {
     const drinkList = ref([]);
     const errors = ref('');
     const providers = ref([]);
-
+    const loading = ref('');
 
 
     const getInputs = async () => {
@@ -25,6 +25,7 @@ export default function useInputs() {
                 }
             }
           }
+          loading.value = true;
     };
 
 
@@ -47,6 +48,7 @@ export default function useInputs() {
     return {
         drinkList,
         errors,
+        loading,
         createInputs,
         getInputs,
         inputs

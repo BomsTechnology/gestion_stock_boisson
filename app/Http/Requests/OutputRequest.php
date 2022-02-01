@@ -24,7 +24,9 @@ class OutputRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+            'amount' => 'required|gt:0',
+            'customer_id' => 'required',
+            // 'data' => 'required'
         ];
     }
 }

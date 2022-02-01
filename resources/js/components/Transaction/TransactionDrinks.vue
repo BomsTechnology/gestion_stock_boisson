@@ -98,6 +98,7 @@
 
 <script>
 import useDashboard from "../../services/transactionservices.js";
+import useNotification from "../../services/notificationservices.js";
 
 export default {
   props: {
@@ -114,10 +115,13 @@ export default {
   setup(props) {
 
     const { getRecents, moves} = useDashboard();
+    const { checkNotification, notifications} = useNotification();
 
     return {
       getRecents,
-      moves
+      moves,
+      checkNotification,
+      notifications
     };
 
   },
