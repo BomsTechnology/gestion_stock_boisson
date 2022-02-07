@@ -11,11 +11,16 @@ module.exports = {
         extend: {
             fontFamily: {
                 sans: ['Nunito', ...defaultTheme.fontFamily.sans],
+                'Comforter': ['Comforter'],
+                'Supermercado-One': ['Supermercado One'],
             },
             spacing: {
                 '128': '32rem',
                 '118': '28rem',
               },
+              rotate: {
+                '-15': '-15deg',
+              }
         },
     },
 
