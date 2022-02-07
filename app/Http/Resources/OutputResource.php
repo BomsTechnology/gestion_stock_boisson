@@ -19,7 +19,7 @@ class OutputResource extends JsonResource
             'id' => $this->id,
             'person' => $this->customer_id,
             'amount' => $this->amount,
-            'date' => $this->created_at,
+            'date' => $this->created_at->format('Y-m-d'),
             'type' => 'Sorties'
             // 'drinks' => $this->whenPivotLoaded('moves', function () {
             //     return $this->pivot->drinks;

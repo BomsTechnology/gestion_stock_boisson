@@ -29,7 +29,7 @@ export default function useDashboard() {
         }
 
         for (var i = 0; i < moves.value.length; i++) {
-            moves.value[i].date = new Date(moves.value[i].date);
+            // moves.value[i].date = new Date(moves.value[i].date);
             if (moves.value[i].type == 'Sorties') {
 
                 for (var y = 0; y < customers.value.length; y++) {

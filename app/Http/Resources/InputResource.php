@@ -19,7 +19,7 @@ class InputResource extends JsonResource
             'id' => $this->id,
             'person' => $this->provider_id,
             'amount' => $this->amount,
-            'date' => $this->created_at,
+            'date' => $this->created_at->format('Y-m-d'),
             'type' => 'Entrées'
             // 'drinks' => $this->whenPivotLoaded('moves', function () {
             //     return $this->pivot->drinks;

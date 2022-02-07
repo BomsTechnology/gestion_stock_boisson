@@ -20,7 +20,7 @@ export default function useOutputs() {
 
         for (var i = 0; i < outputs.value.length; i++) {
             
-            outputs.value[i].date = new Date(outputs.value[i].date);
+            // outputs.value[i].date = new Date(outputs.value[i].date);
 
             for (var y = 0; y < customers.value.length; y++) {
                 if(outputs.value[i].person === customers.value[y].id){

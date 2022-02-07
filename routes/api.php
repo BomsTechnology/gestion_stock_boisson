@@ -34,8 +34,11 @@ Route::get('outputs-limit', [OutputController::class, 'getLimit'])->name('output
 
 Route::get('transaction-inputs/{id}', [InputController::class, 'transaction_provider'])->name('input.transaction');
 Route::get('transaction-outputs/{id}', [OutputController::class, 'transaction_customer'])->name('outputs.transaction');
-Route::get('transaction-inputs-drinks/{id}', [InputController::class, 'transaction_drinks'])->name('input.transaction');
-Route::get('transaction-outputs-drinks/{id}', [OutputController::class, 'transaction_drinks'])->name('outputs.transaction');
+
+Route::get('bilan-inputs-period/{period}', [InputController::class, 'transaction_bilan_period'])->name('input.bilan.period');
+Route::get('bilan-outputs-period/{period}', [OutputController::class, 'transaction_bilan_period'])->name('outputs.bilan.period');
+Route::get('bilan-inputs-date/{date1}/{date2}', [InputController::class, 'transaction_bilan_date'])->name('input.bilan.date');
+Route::get('bilan-outputs-date/{date1}/{date2}', [OutputController::class, 'transaction_bilan_date'])->name('outputs.bilan.date');
 
 
 

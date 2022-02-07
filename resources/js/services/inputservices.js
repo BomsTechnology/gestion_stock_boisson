@@ -18,7 +18,7 @@ export default function useInputs() {
         inputs.value = response.data.data;
 
         for (var i = 0; i < inputs.value.length; i++) {
-            inputs.value[i].date = new Date(inputs.value[i].date);
+            // inputs.value[i].date = new Date(inputs.value[i].date);
             for (var y = 0; y < providers.value.length; y++) {
                 if(inputs.value[i].person === providers.value[y].id){
                     inputs.value[i].person = providers.value[y].name;

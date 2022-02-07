@@ -50,10 +50,7 @@
               <td class="px-6 py-4 whitespace-nowrap">
                 <div class="flex items-center">
                     <div class="text-sm font-medium text-gray-900">
-                      <!-- <span v-for="customer in customers" :key="customer.id">
-                        <span v-if="customer.id == output.customer"> -->
                         {{ move.person }}
-                        <!-- </span></span> -->
                     </div>
                 </div>
               </td>

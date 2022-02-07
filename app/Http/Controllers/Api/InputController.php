@@ -97,9 +97,46 @@ class InputController extends Controller
     {
         //
     }
+
     public function transaction_provider(Request $request, $id)
     {
         return InputResource::collection(Input::where('provider_id', '=', $id)->get());
+    }
+
+    public function transaction_bilan_period(Request $request, $period)
+    {
+        if($period == 'Aujourd\'hui')
+        {
+            $date =  date("Y-m-d");
+            return InputResource::collection(Input::where('created_at', '=', $date)->get());
+        }
+        elseif($period == 'Cette Semaine')
+        {
+            $monday = strtotime('next monday -1 week');
+            $monday = date('w', $monday) == date('w') ? strtotime(date('Y-m-d', $monday)."+7 days") : $monday;
+            $sunday = strtotime(date('Y-m-d', $monday)." +6 days");
+            $date1 = date('Y-m-d', $monday);
+            $date2 = date('Y-m-d', $sunday);
+            return InputResource::collection(Input::whereBetween('created_at', [$date1, $date2])->get());
+        }
+        elseif($period == 'Ce mois')
+        {
+            $date1 = date('Y-m-d', strtotime("first day of this month"));
+            $date2 = date('Y-m-d', strtotime("last day of this month"));
+            return InputResource::collection(Input::whereBetween('created_at', [$date1, $date2])->get());
+        }
+        else
+        {
+            $date =  date("Y");
+            $date1 = $date."-01"."-01";
+            $date2 = $date."-12"."-31";
+            return InputResource::collection(Input::whereBetween('created_at', [$date1, $date2])->get());
+        }
+    }
+
+    public function transaction_bilan_date(Request $request, $date1, $date2)
+    {
+        return InputResource::collection(Input::whereBetween('created_at', [$date1, $date2])->get());
     }
 
     public function transaction_drinks(Request $request, $id)

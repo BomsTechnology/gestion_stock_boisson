@@ -50,7 +50,7 @@
                                               <div class="shadow overflow-hidden sm:rounded-md">
                                                 <div class="px-4 py-5 bg-white sm:p-6">
                                                     <div class="col-span-6 sm:col-span-3 mb-3 text-xl font-bold">
-                                                        <span for="country" class="text-gray-900 px-2">Date : {{ $move->created_at }}</span>
+                                                        <span for="country" class="text-gray-900 px-2">Date : {{ $move->created_at->format('Y-m-d') }}</span>
                                                         <span for="country" class="text-gray-500 px-2">
                                                             Nom 
                                                         @if (request()->routeIs('outputs.details'))

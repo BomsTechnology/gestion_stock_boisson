@@ -58,7 +58,7 @@
                   text-white
                 "
               >
-              Il ne reste que {{ notification.quantity }} Cassier <span v-if="notification.quantity > 1">s</span>  de {{ notification.name }} !!!
+              Il ne reste que {{ notification.quantity }} Cassier <span v-if="notification.quantity > 1">s &nbsp</span>de {{ notification.name }} !!!
               </span>
             </div>
             <div class="order-2 flex-shrink-0 sm:order-3 sm:ml-3">
@@ -106,17 +106,12 @@
   
 </template>
 <script>
-//import useNotification from "../../services/notificationservices.js";
+
 export default {
     props: ['open', 'notifications'],
 
     setup() {
-      // const { checkNotification, notifications} = useNotification();
 
-      // return{
-      //   checkNotification,
-      //   notifications
-      // }
     },
 
     methods: {
@@ -127,7 +122,7 @@ export default {
     },
 
     mounted() {
-      // this.checkNotification();
+
     }
 }
 </script>
